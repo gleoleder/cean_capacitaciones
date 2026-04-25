@@ -2462,3 +2462,49 @@ document.addEventListener('keydown', (e) => {
     closeLightbox();
   }
 });
+
+// ═══════════════════════════════════════════════
+// EFECTO DE ONDAS EN EL HERO (AURORA)
+// ═══════════════════════════════════════════════
+
+function createRipple(event) {
+  // Solo crear ondas si se hace click directo en el hero-bg-layer o sus hijos
+  const hero = document.getElementById('hero-section');
+  if (!hero) return;
+  
+  const bgLayer = hero.querySelector('.hero-bg-layer');
+  if (!bgLayer) return;
+  
+  // Obtener posición del click relativo al hero
+  const rect = hero.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  
+  // Crear onda principal (dorada)
+  const ripple = document.createElement('div');
+  ripple.className = 'ripple';
+  ripple.style.left = (x - 75) + 'px';
+  ripple.style.top = (y - 75) + 'px';
+  ripple.style.width = '150px';
+  ripple.style.height = '150px';
+  
+  // Crear onda secundaria (azul)
+  const ripple2 = document.createElement('div');
+  ripple2.className = 'ripple-2';
+  ripple2.style.left = (x - 100) + 'px';
+  ripple2.style.top = (y - 100) + 'px';
+  ripple2.style.width = '200px';
+  ripple2.style.height = '200px';
+  
+  bgLayer.appendChild(ripple);
+  bgLayer.appendChild(ripple2);
+  
+  // Limpiar elementos después de la animación
+  setTimeout(() => {
+    ripple.remove();
+  }, 1200);
+  
+  setTimeout(() => {
+    ripple2.remove();
+  }, 1500);
+}
