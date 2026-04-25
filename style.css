@@ -45,20 +45,53 @@
 
 /* ── Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--gray-800);
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
 }
 a { cursor: pointer; color: var(--cean-blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
 ul { list-style: none; }
 input, button, select { font-family: inherit; }
 
+/* Prevenir zoom en móviles */
+@media (max-width: 768px) {
+  * {
+    touch-action: manipulation;
+  }
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
 .hidden { display: none !important; }
 .view { min-height: calc(100vh - var(--nav-h)); }
+
+/* Prevenir overflow en imagenes y elementos */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Contenedores con ancho limitado */
+.container, .section-wrap, .hero-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Botones - prevenir desbordamiento */
+.btn {
+  max-width: 100%;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ── Botones ─────────────────────────────────────────────────── */
 .btn {
@@ -129,6 +162,14 @@ input, button, select { font-family: inherit; }
   background: linear-gradient(90deg, var(--cean-blue-dark) 0%, var(--cean-blue) 100%);
   display: flex; align-items: center; padding: 0 32px; gap: 32px;
   box-shadow: 0 2px 16px rgba(13,59,94,0.35);
+  width: 100%;
+  max-width: 100%;
+}
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+    gap: 10px;
+  }
 }
 .nav-brand { cursor: pointer; }
 .brand-logo { display: flex; align-items: center; gap: 10px; }
@@ -170,6 +211,8 @@ input, button, select { font-family: inherit; }
   background-size: 400% 400%;
   animation: heroGrad 18s ease infinite;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 @keyframes heroGrad {
   0%   { background-position: 0% 50%; }
@@ -321,6 +364,7 @@ input, button, select { font-family: inherit; }
   grid-template-columns: 1fr 520px;
   gap: 64px;
   align-items: center;
+  width: 100%;
 }
 .hero-content { max-width: 620px; }
 
@@ -468,6 +512,10 @@ input, button, select { font-family: inherit; }
   background: var(--cean-gold);
   display: flex; align-items: center; justify-content: center;
   padding: 24px 64px; gap: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .stat-box { text-align: center; padding: 0 40px; }
 .stat-box strong { display: block; font-size: 2rem; font-weight: 900; color: var(--cean-blue-dark); }
@@ -559,6 +607,13 @@ input, button, select { font-family: inherit; }
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.catalog-filters::-webkit-scrollbar, .dash-filters::-webkit-scrollbar {
+  display: none;
 }
 .filter-btn {
   padding: 7px 14px;
@@ -1396,6 +1451,16 @@ input, button, select { font-family: inherit; }
 @media (max-width: 768px) {
   :root { --nav-h: 60px; }
 
+  /* Prevenir overflow horizontal */
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  .section-wrap {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   /* Navbar */
   .navbar { padding: 0 16px; gap: 10px; }
   .nav-link { display: none; }
@@ -1486,6 +1551,11 @@ input, button, select { font-family: inherit; }
 
 /* ── 640px — Teléfono grande / tablet pequeño ──────────────── */
 @media (max-width: 640px) {
+  /* Prevenir overflow */
+  .section-wrap {
+    padding: 0 16px;
+  }
+
   /* Hero */
   .hero-new { padding: 36px 16px; }
   .hero-title-new { font-size: 2rem; }
@@ -1494,7 +1564,7 @@ input, button, select { font-family: inherit; }
   .hero-feature-item { padding: 10px 12px; font-size: 0.82rem; }
   .hero-badge-top { font-size: 0.78rem; padding: 6px 12px; }
   .hero-buttons { flex-direction: column; }
-  .hero-buttons .btn { width: 100%; justify-content: center; }
+  .hero-buttons .btn { width: 100%; justify-content: center; min-height: 48px; }
   .hero-img-frame { padding: 14px; max-width: 300px; }
 
   /* Stats — grid 2x2 */
@@ -1551,7 +1621,7 @@ input, button, select { font-family: inherit; }
   /* Navbar */
   .navbar { padding: 0 12px; }
   .nav-username { display: none; }
-  .btn-sm { padding: 6px 10px; font-size: 0.78rem; }
+  .btn-sm { padding: 6px 10px; font-size: 0.78rem; min-height: 44px; }
   .logo-svg { height: 42px; }
 
   /* Hero — ocultar imagen, foco en texto */
@@ -1563,6 +1633,7 @@ input, button, select { font-family: inherit; }
   .hero-features-grid { grid-template-columns: 1fr; gap: 7px; margin-bottom: 22px; }
   .hero-feature-item { padding: 9px 12px; font-size: 0.83rem; }
   .hero-badge-top { font-size: 0.72rem; padding: 5px 10px; margin-bottom: 14px; }
+  .hero-buttons .btn-lg { min-height: 52px; font-size: 0.95rem; }
 
   /* Reducir orbes — mejor rendimiento en móvil */
   .orb-3, .orb-4 { display: none; }
@@ -1590,19 +1661,20 @@ input, button, select { font-family: inherit; }
   .incl-item { font-size: 0.73rem; padding: 4px 10px; }
   .detail-meta { gap: 12px; font-size: 0.78rem; }
   .detail-body { padding: 20px 14px; }
+  #enroll-btn { min-height: 52px; font-size: 1rem; }
 
   /* Dashboard */
   .dash-main { padding: 16px 12px; }
   .dash-header h2 { font-size: 1.15rem; }
   .enrolled-thumb { width: 66px; height: 66px; }
   .enrolled-title { font-size: 0.84rem; }
-  .dash-link { padding: 8px 10px; font-size: 0; }
+  .dash-link { padding: 8px 10px; font-size: 0; min-height: 48px; }
   .dash-link .dash-icon { margin: 0 auto; font-size: initial; }
 
   /* Player */
   .player-info { padding: 12px 14px; }
   .player-info-row h2 { font-size: 0.95rem; }
-  .player-nav-btns .btn { padding: 8px 12px; font-size: 0.82rem; }
+  .player-nav-btns .btn { padding: 8px 12px; font-size: 0.82rem; min-height: 48px; }
   .player-sidebar { max-height: 230px; }
   .lesson-item { padding: 9px 12px; font-size: 0.8rem; }
 
@@ -1613,7 +1685,7 @@ input, button, select { font-family: inherit; }
   .exam-logo-svg { height: 44px; }
   .question-card { padding: 18px 14px; }
   .q-text { font-size: 0.94rem; margin-bottom: 16px; }
-  .opt-btn { padding: 10px 11px; font-size: 0.82rem; gap: 8px; }
+  .opt-btn { padding: 12px 11px; font-size: 0.82rem; gap: 8px; min-height: 52px; }
   .opt-letter { width: 24px; height: 24px; font-size: 0.72rem; }
   .q-nav { gap: 7px; }
   .q-nav-label { display: none; }
@@ -1621,6 +1693,7 @@ input, button, select { font-family: inherit; }
   .res-msg { font-size: 1.15rem; }
   .results-card { padding: 28px 16px; }
   .res-breakdown { gap: 14px; padding: 12px; }
+  .res-btns .btn { min-height: 48px; }
 
   /* Certificado */
   .cert-page-wrap { padding: 12px 10px; }
@@ -1631,7 +1704,7 @@ input, button, select { font-family: inherit; }
   .cert-org-main { font-size: 1rem; }
   .cert-sig-line { width: 100px; }
   .cert-actions { flex-direction: column; align-items: stretch; }
-  .cert-actions .btn { justify-content: center; }
+  .cert-actions .btn { justify-content: center; min-height: 48px; }
 
   /* Promo */
   .cert-promo { padding: 28px 14px; }
@@ -1649,6 +1722,8 @@ input, button, select { font-family: inherit; }
   .modal-box { padding: 24px 16px 28px; }
   .auth-logo-svg { height: 55px; }
   .auth-header h2 { font-size: 1.2rem; }
+  .form-group input { min-height: 48px; }
+  .btn-full { min-height: 48px; }
 }
 
 /* ── 380px — Teléfono pequeño (Android gama baja, iPhone mini) */
