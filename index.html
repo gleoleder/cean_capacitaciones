@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEAN Capacitación — Plataforma Virtual de Aprendizaje</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand" onclick="showView('home')">
+      <div class="brand-logo">
+        <svg class="logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+          <!-- Árbol dorado -->
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#F5C518"/>
+              <stop offset="50%" style="stop-color:#D4A800"/>
+              <stop offset="100%" style="stop-color:#F5C518"/>
+            </linearGradient>
+          </defs>
+          <!-- Copa del árbol -->
+          <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGrad)"/>
+          <!-- Tronco -->
+          <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGrad)"/>
+          <!-- Base -->
+          <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGrad)"/>
+          <!-- Texto CEAN -->
+          <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGrad)" text-anchor="middle">CEAN</text>
+          <!-- Texto Capacitación -->
+          <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGrad)" text-anchor="middle">Capacitación</text>
+        </svg>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" onclick="showView('home')">Inicio</a>
+      <a class="nav-link" onclick="scrollToCourses()">Cursos</a>
+      <a class="nav-link" href="tel:72530940"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>72530940</a>
+      <div id="nav-guest" class="nav-auth">
+        <button class="btn btn-outline-nav btn-sm" onclick="showAuth('login')">Iniciar sesión</button>
+        <button class="btn btn-gold btn-sm" onclick="showAuth('register')">Inscribirme</button>
+      </div>
+      <div id="nav-user" class="nav-user hidden">
+        <div class="nav-avatar" id="nav-avatar">A</div>
+        <span id="nav-username" class="nav-username">Alumno</span>
+        <button class="btn btn-ghost btn-sm" onclick="showView('dashboard')">Mi Panel</button>
+        <button class="btn btn-outline-nav btn-sm" onclick="logout()">Salir</button>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ MENÚ MÓVIL ════════════════════════════════════════════════ -->
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="mobile-menu-backdrop" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">CEAN Capacitación</span>
+        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+      </div>
+      <nav class="mobile-nav">
+        <a class="mobile-nav-link" onclick="showView('home'); closeMobileMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </a>
+        <a class="mobile-nav-link" onclick="scrollToCourses(); closeMobileMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Catálogo de Cursos
+        </a>
+        <a class="mobile-nav-link" href="tel:72530940">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          72530940
+        </a>
+      </nav>
+      <div class="mobile-menu-auth" id="mobile-menu-auth-guest">
+        <button class="btn btn-outline-cean btn-full" onclick="showAuth('login'); closeMobileMenu()">Iniciar sesión</button>
+        <button class="btn btn-gold btn-full" onclick="showAuth('register'); closeMobileMenu()">¡Inscribirme Ahora!</button>
+      </div>
+      <div class="mobile-menu-auth hidden" id="mobile-menu-auth-user">
+        <button class="btn btn-cean btn-full" onclick="showView('dashboard'); closeMobileMenu()">Mi Panel</button>
+        <button class="btn btn-outline-cean btn-full" onclick="logout(); closeMobileMenu()">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: HOME ═══════════════════════════════════════════════════════ -->
+  <div id="view-home" class="view">
+
+    <!-- Hero -->
+    <section class="hero-new">
+      <div class="hero-bg-layer">
+        <div class="hero-orb orb-1"></div>
+        <div class="hero-orb orb-2"></div>
+        <div class="hero-orb orb-3"></div>
+        <div class="hero-orb orb-4"></div>
+        <div class="hero-dots"></div>
+        <div class="hero-diag"></div>
+        <div class="hero-particles-wrap">
+          <i class="hpar"></i><i class="hpar"></i><i class="hpar"></i>
+          <i class="hpar"></i><i class="hpar"></i><i class="hpar"></i>
+          <i class="hpar"></i><i class="hpar"></i><i class="hpar"></i>
+          <i class="hpar"></i><i class="hpar"></i><i class="hpar"></i>
+          <i class="hpar"></i><i class="hpar"></i>
+        </div>
+        <div class="hero-ring ring-1"></div>
+        <div class="hero-ring ring-2"></div>
+      </div>
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge-top">
+            <span class="badge-dot"></span>
+            Plataforma Virtual de Capacitación Profesional
+          </div>
+          <h1 class="hero-title-new">Certifícate con<br><span class="hero-gold">CEAN Capacitación</span></h1>
+          <p class="hero-description">
+            Cursos 100% online con certificado físico oficial, sello horario y código QR de autenticidad.
+            Capacitación en leyes, idiomas y tecnología para todo Bolivia.
+          </p>
+          <div class="hero-features-grid">
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span>Clases disponibles 24/7</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.11"/></svg>
+              <span>Certificado físico con sello</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <span>Envíos a nivel nacional</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span>QR de autenticidad</span>
+            </div>
+          </div>
+          <div class="hero-buttons">
+            <button class="btn btn-gold btn-lg" onclick="showAuth('register')">¡Inscribirme Ahora!</button>
+            <button class="btn btn-outline-white btn-lg" onclick="scrollToCourses()">Ver Catálogo</button>
+          </div>
+        </div>
+        <div class="hero-image-side">
+          <div class="hero-img-frame">
+            <img src="assets/cursos/certifica.png" alt="Certifícate con CEAN" class="hero-main-img">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-bar">
+      <div class="stat-box"><strong>33+</strong><span>Cursos Online</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat-box"><strong>24/7</strong><span>Acceso a clases</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat-box"><strong>100%</strong><span>Certificado oficial</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat-box"><strong>Bolivia</strong><span>Envíos nacionales</span></div>
+    </section>
+
+    <!-- Pasos -->
+    <section class="steps-section">
+      <div class="section-wrap">
+        <h2 class="section-title">¿Cómo funciona?</h2>
+        <p class="section-sub">Del registro al certificado en 4 pasos simples</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+            <div class="step-num">01</div>
+            <h3>Regístrate</h3>
+            <p>Crea tu cuenta gratis y accede al catálogo completo de cursos CEAN.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step-card">
+            <div class="step-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <div class="step-num">02</div>
+            <h3>Estudia</h3>
+            <p>Accede a las clases en video 24/7. Aprende a tu propio ritmo.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step-card">
+            <div class="step-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+            <div class="step-num">03</div>
+            <h3>Examínate</h3>
+            <p>Presenta el examen final. Necesitas 70% para aprobar.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step-card">
+            <div class="step-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.11"/></svg></div>
+            <div class="step-num">04</div>
+            <h3>Certifícate</h3>
+            <p>Recibe tu certificado físico con sello y QR a nivel nacional.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo de cursos -->
+    <section class="catalog-section" id="courses-section">
+      <div class="section-wrap">
+        <div class="catalog-header">
+          <div>
+            <h2 class="section-title">Catálogo de Cursos</h2>
+            <p class="section-sub">Elige tu área de capacitación profesional</p>
+          </div>
+          <div class="catalog-search-box">
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="course-search-input" placeholder="Buscar cursos por nombre o ley..." onkeyup="searchCourses(this.value)">
+            </div>
+          </div>
+          <div class="catalog-filters" id="catalog-filters">
+            <button class="filter-btn active" onclick="filterCourses('all', this)">Todos</button>
+            <button class="filter-btn" onclick="filterCourses('Leyes y Normativa', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v13M3 7l9-4 9 4M7 10h10M7 14h10"/></svg>Leyes</button>
+            <button class="filter-btn" onclick="filterCourses('Idiomas', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Idiomas</button>
+            <button class="filter-btn" onclick="filterCourses('Tecnología', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Tecnología</button>
+          </div>
+        </div>
+        <div class="courses-grid" id="home-courses-grid"></div>
+      </div>
+    </section>
+
+    <!-- Certificado promo -->
+    <section class="cert-promo">
+      <div class="cert-promo-inner">
+        <div class="cert-promo-text">
+          <h2>Certificado físico con validez nacional</h2>
+          <p>Cada certificado incluye carga horaria, sellos originales y código QR de autenticidad. Enviamos a toda Bolivia.</p>
+          <div class="cert-promo-features">
+            <span><svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Sello original</span>
+            <span><svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Carga horaria</span>
+            <span><svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>QR de autenticidad</span>
+            <span><svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Envío nacional</span>
+          </div>
+          <button class="btn btn-gold btn-lg" onclick="showAuth('register')">Empezar ahora</button>
+        </div>
+        <div class="cert-promo-contact">
+          <h3>Contacto</h3>
+          <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:72530940">72530940</a></div>
+          <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>La Paz, Av. 20 de Octubre, edit. Yocapri Mezzanine</span></div>
+          <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>CEAN Capacitación</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-brand">
+        <svg class="footer-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="goldGradFooter" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+          <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGradFooter)"/>
+          <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGradFooter)"/>
+          <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGradFooter)"/>
+          <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGradFooter)" text-anchor="middle">CEAN</text>
+          <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGradFooter)" text-anchor="middle">Capacitación</text>
+        </svg>
+        <div>
+          <strong>CEAN CAPACITACIÓN</strong>
+          <p>Crece en tu carrera profesional</p>
+        </div>
+      </div>
+      <p class="footer-copy">© 2026 CEAN Capacitación — Plataforma Virtual de Aprendizaje. La Paz, Bolivia.</p>
+    </footer>
+  </div>
+
+  <!-- ══ VIEW: DASHBOARD ══════════════════════════════════════════════════ -->
+  <div id="view-dashboard" class="view hidden">
+    <div class="dash-layout">
+      <aside class="dash-sidebar">
+        <div class="dash-profile">
+          <div class="dash-avatar" id="dash-avatar">A</div>
+          <h3 id="dash-name">Alumno</h3>
+          <p id="dash-email">correo@ejemplo.com</p>
+          <div class="dash-badge"><svg class="dash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Alumno CEAN</div>
+        </div>
+        <nav class="dash-nav">
+          <a class="dash-link active" id="dlink-my-courses" onclick="showDashTab('my-courses')"><svg class="dash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Mis Cursos</a>
+          <a class="dash-link" id="dlink-explore" onclick="showDashTab('explore')"><svg class="dash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Catálogo</a>
+          <a class="dash-link" id="dlink-certificates" onclick="showDashTab('certificates')"><svg class="dash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.11"/></svg>Certificados</a>
+        </nav>
+        <div class="dash-contact">
+          <p>¿Necesitas ayuda?</p>
+          <a href="tel:72530940" class="btn btn-gold btn-sm btn-full"><svg class="dash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>72530940</a>
+        </div>
+      </aside>
+      <main class="dash-main">
+
+        <!-- Mis cursos -->
+        <div id="dash-tab-my-courses" class="dash-tab-content">
+          <div class="dash-header"><h2>Mis Cursos</h2><p>Continúa donde lo dejaste</p></div>
+          <div id="enrolled-list" class="enrolled-list"></div>
+        </div>
+
+        <!-- Catálogo -->
+        <div id="dash-tab-explore" class="dash-tab-content hidden">
+          <div class="dash-header"><h2>Catálogo de Cursos</h2><p>Descubre todos los cursos disponibles</p></div>
+          <div class="catalog-search-box">
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="dashboard-search-input" placeholder="Buscar cursos..." onkeyup="searchCoursesDashboard(this.value)">
+            </div>
+          </div>
+          <div class="dash-filters">
+            <button class="filter-btn active" onclick="filterExplore('all', this)">Todos</button>
+            <button class="filter-btn" onclick="filterExplore('Leyes y Normativa', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v13M3 7l9-4 9 4M7 10h10M7 14h10"/></svg>Leyes</button>
+            <button class="filter-btn" onclick="filterExplore('Idiomas', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Idiomas</button>
+            <button class="filter-btn" onclick="filterExplore('Tecnología', this)"><svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Tecnología</button>
+          </div>
+          <div class="courses-grid" id="explore-grid"></div>
+        </div>
+
+        <!-- Certificados -->
+        <div id="dash-tab-certificates" class="dash-tab-content hidden">
+          <div class="dash-header"><h2>Mis Certificados</h2><p>Tus logros académicos con CEAN</p></div>
+          <div id="certs-list" class="certs-list"></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: DETALLE CURSO ══════════════════════════════════════════════ -->
+  <div id="view-course-detail" class="view hidden">
+    <div class="detail-hero" id="detail-hero">
+      <div class="detail-hero-inner">
+        <div class="breadcrumb">
+          <a onclick="showView('home')">Inicio</a> <span>›</span>
+          <span id="d-cat"></span>
+        </div>
+        <div class="detail-hero-grid">
+          <div class="detail-hero-text">
+            <div class="detail-ley-badge" id="d-ley-badge"></div>
+            <h1 id="d-title"></h1>
+            <p id="d-desc"></p>
+            <div class="detail-meta">
+              <span><svg class="meta-icon-detail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><b id="d-lessons"></b> lecciones</span>
+              <span><svg class="meta-icon-detail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><b id="d-duration"></b></span>
+              <span><svg class="meta-icon-detail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><b id="d-level"></b></span>
+            </div>
+            <div class="detail-includes">
+              <div class="incl-item"><svg class="incl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Clases 24/7</div>
+              <div class="incl-item"><svg class="incl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Examen final</div>
+              <div class="incl-item"><svg class="incl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.11"/></svg>Certificado físico</div>
+              <div class="incl-item"><svg class="incl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>QR de autenticidad</div>
+              <div class="incl-item"><svg class="incl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Envío nacional</div>
+            </div>
+            <button class="btn btn-gold btn-lg" id="enroll-btn" onclick="handleEnroll()">¡Inscribirme Ahora!</button>
+          </div>
+          <div class="detail-hero-img">
+            <img id="d-thumb" src="" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-main">
+        <div class="detail-box">
+          <h3>Lo que aprenderás</h3>
+          <ul id="d-objectives" class="obj-list"></ul>
+        </div>
+        <div class="detail-box">
+          <h3>Contenido del curso</h3>
+          <div id="d-curriculum"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: REPRODUCTOR ════════════════════════════════════════════════ -->
+  <div id="view-player" class="view hidden">
+    <div class="player-layout">
+
+      <aside class="player-sidebar">
+        <div class="player-top">
+          <button class="btn btn-ghost btn-sm" onclick="showView('dashboard')">← Panel</button>
+          <div class="player-logo">
+            <svg class="player-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="goldGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+              <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGrad2)"/>
+              <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGrad2)"/>
+              <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGrad2)"/>
+              <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGrad2)" text-anchor="middle">CEAN</text>
+              <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGrad2)" text-anchor="middle">Capacitación</text>
+            </svg>
+          </div>
+          <h4 id="player-course-title"></h4>
+          <div class="player-prog-wrap">
+            <div class="player-prog-bar"><div class="player-prog-fill" id="player-prog-fill"></div></div>
+            <span id="player-prog-pct">0%</span>
+          </div>
+        </div>
+        <div id="lessons-list" class="lessons-list"></div>
+        <div class="player-bottom">
+          <button class="btn btn-gold btn-full" id="exam-btn" onclick="goToExam()" disabled>
+            📝 Ir al Examen Final
+          </button>
+        </div>
+      </aside>
+
+      <main class="player-main">
+        <div class="video-wrap">
+          <div class="video-placeholder" id="video-placeholder">
+            <div class="vp-logo">
+              <svg class="vp-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="goldGradVP" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+                <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGradVP)"/>
+                <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGradVP)"/>
+                <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGradVP)"/>
+                <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGradVP)" text-anchor="middle">CEAN</text>
+                <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGradVP)" text-anchor="middle">Capacitación</text>
+              </svg>
+            </div>
+            <p>Selecciona una lección para comenzar</p>
+          </div>
+          <iframe id="video-iframe" class="hidden"
+            allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+        </div>
+        <div class="player-info">
+          <div class="player-info-row">
+            <div>
+              <h2 id="lesson-title">Selecciona una lección</h2>
+              <p id="lesson-desc" class="lesson-desc-txt"></p>
+            </div>
+            <button class="btn btn-success" id="mark-btn" onclick="markComplete()" disabled>✅ Marcar completada</button>
+          </div>
+          <div class="player-nav-btns">
+            <button class="btn btn-outline-cean" id="prev-btn" onclick="prevLesson()">← Anterior</button>
+            <button class="btn btn-outline-cean" id="next-btn" onclick="nextLesson()">Siguiente →</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: EXAMEN ═════════════════════════════════════════════════════ -->
+  <div id="view-exam" class="view hidden">
+    <div class="exam-wrap">
+
+      <!-- Intro -->
+      <div id="exam-intro" class="exam-panel">
+        <div class="exam-card">
+          <div class="exam-logo-top">
+            <svg class="exam-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="goldGrad5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+              <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGrad5)"/>
+              <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGrad5)"/>
+              <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGrad5)"/>
+              <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGrad5)" text-anchor="middle">CEAN</text>
+              <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGrad5)" text-anchor="middle">Capacitación</text>
+            </svg>
+          </div>
+          <div class="exam-intro-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          <h2>Examen Final</h2>
+          <h3 id="exam-course-name"></h3>
+          <div class="exam-rules">
+            <div class="exam-rule"><span>📌</span><p>10 preguntas de opción múltiple</p></div>
+            <div class="exam-rule"><span>✅</span><p>Necesitas <b>70%</b> para aprobar (7 de 10 correctas)</p></div>
+            <div class="exam-rule"><span>🔄</span><p>Puedes repetir si no apruebas</p></div>
+            <div class="exam-rule"><span>🏅</span><p>Al aprobar recibes tu certificado físico CEAN</p></div>
+          </div>
+          <button class="btn btn-gold btn-lg" onclick="startExam()">Comenzar Examen</button>
+          <button class="btn btn-ghost" style="margin-top:10px" onclick="showView('player')">← Volver al curso</button>
+        </div>
+      </div>
+
+      <!-- Preguntas -->
+      <div id="exam-questions" class="exam-panel hidden">
+        <div class="exam-q-top">
+          <div class="exam-q-brand">
+            <svg class="exam-q-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="goldGradEQ" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+              <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGradEQ)"/>
+              <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGradEQ)"/>
+              <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGradEQ)"/>
+              <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGradEQ)" text-anchor="middle">CEAN</text>
+              <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGradEQ)" text-anchor="middle">Capacitación</text>
+            </svg>
+            <span id="exam-q-course"></span>
+          </div>
+          <div class="exam-q-prog">
+            <span id="q-counter">Pregunta 1 de 10</span>
+            <div class="exam-prog-bar"><div class="exam-prog-fill" id="exam-prog-fill"></div></div>
+          </div>
+        </div>
+        <div class="question-card">
+          <p class="q-label" id="q-label">Pregunta 1</p>
+          <h2 class="q-text" id="q-text"></h2>
+          <div class="options-list" id="options-list"></div>
+          <div class="q-nav">
+            <button class="btn btn-outline-cean" id="q-prev" onclick="qPrev()">← Anterior</button>
+            <span id="q-nav-label" class="q-nav-label">1 / 10</span>
+            <button class="btn btn-cean" id="q-next" onclick="qNext()">Siguiente →</button>
+            <button class="btn btn-gold hidden" id="q-submit" onclick="submitExam()">Enviar Examen ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div id="exam-results" class="exam-panel hidden">
+        <div id="results-card" class="results-card"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ VIEW: CERTIFICADO ════════════════════════════════════════════════ -->
+  <div id="view-certificate" class="view hidden">
+    <div class="cert-page-wrap">
+      <div class="cert-actions no-print">
+        <button class="btn btn-gold" onclick="window.print()"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Imprimir / Guardar PDF</button>
+        <button class="btn btn-outline-cean" onclick="showView('dashboard')">← Mi Panel</button>
+      </div>
+      <div id="cert-wrapper" class="cert-wrapper"></div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL AUTH ════════════════════════════════════════════════════════ -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeAuth()"></div>
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeAuth()">✕</button>
+
+      <!-- Login -->
+      <div id="form-login">
+        <div class="auth-header">
+          <div class="auth-logo-wrap">
+            <svg class="auth-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="goldGrad3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+              <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGrad3)"/>
+              <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGrad3)"/>
+              <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGrad3)"/>
+              <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGrad3)" text-anchor="middle">CEAN</text>
+              <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGrad3)" text-anchor="middle">Capacitación</text>
+            </svg>
+          </div>
+          <h2>Bienvenido de vuelta</h2>
+          <p>Accede a tu plataforma de capacitación</p>
+        </div>
+        <form onsubmit="login(event)">
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="login-email" placeholder="tu@correo.com" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+          <div id="login-error" class="form-error hidden"></div>
+          <button type="submit" class="btn btn-gold btn-full">Iniciar Sesión</button>
+        </form>
+        <p class="auth-switch">¿No tienes cuenta? <a onclick="showAuth('register')">Regístrate gratis</a></p>
+        <div class="demo-hint">
+          <strong>Cuenta Demo:</strong><br>
+          Email: <code>demo@cean.bo</code><br>
+          Contraseña: <code>cean2026</code><br>
+          <small>Incluye progreso precargado para ver el funcionamiento</small>
+        </div>
+      </div>
+
+      <!-- Registro -->
+      <div id="form-register" class="hidden">
+        <div class="auth-header">
+          <div class="auth-logo-wrap">
+            <svg class="auth-logo-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="goldGrad4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C518"/><stop offset="50%" style="stop-color:#D4A800"/><stop offset="100%" style="stop-color:#F5C518"/></linearGradient></defs>
+              <path d="M100 15 C120 15 135 25 145 40 C155 55 155 70 145 80 C135 90 120 95 100 95 C80 95 65 90 55 80 C45 70 45 55 55 40 C65 25 80 15 100 15Z" fill="url(#goldGrad4)"/>
+              <path d="M95 95 L105 95 L108 125 L92 125 Z" fill="url(#goldGrad4)"/>
+              <path d="M85 125 L115 125 L115 130 L85 130 Z" fill="url(#goldGrad4)"/>
+              <text x="100" y="155" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="url(#goldGrad4)" text-anchor="middle">CEAN</text>
+              <text x="100" y="175" font-family="cursive" font-size="18" font-weight="600" fill="url(#goldGrad4)" text-anchor="middle">Capacitación</text>
+            </svg>
+          </div>
+          <h2>Crea tu cuenta</h2>
+          <p>Empieza tu capacitación profesional hoy</p>
+        </div>
+        <form onsubmit="register(event)">
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="reg-name" placeholder="Juan García Quispe" required>
+          </div>
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="reg-email" placeholder="tu@correo.com" required>
+          </div>
+          <div class="form-group">
+            <label>Teléfono / WhatsApp</label>
+            <input type="tel" id="reg-phone" placeholder="7XXXXXXX">
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
+          </div>
+          <div id="reg-error" class="form-error hidden"></div>
+          <button type="submit" class="btn btn-gold btn-full">Crear Cuenta Gratis</button>
+        </form>
+        <p class="auth-switch">¿Ya tienes cuenta? <a onclick="showAuth('login')">Inicia sesión</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- LIGHTBOX PARA IMÁGENES -->
+  <div id="image-lightbox" class="lightbox hidden" onclick="closeLightbox()">
+    <div class="lightbox-overlay"></div>
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
